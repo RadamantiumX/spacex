@@ -1,0 +1,40 @@
+---
+interface Props { // Interface de TypeScript, 
+	title: string; // Añadimos propiedades por medio de Props
+}
+// Astro es una variable global q funciona en en los archivos ".astro"
+const { title } = Astro.props; 
+import Header from '../components/Header.astro';
+import { ViewTransitions } from "astro:transitions"
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Astro description" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<ViewTransitions/>
+	</head>
+	<body class="bg-gray-900 min-h-screen pb-32">
+		<Header/>
+		<main class="max-w-5xl px-4 m-auto">
+			<slot /> <!--Children components, todos van aca-->
+		</main>	
+	</body>
+</html>
+<!--Con "is:global" hacemos que nuestros estilos sean globales, si no, funciona solo en ese componente-->
+<style is:global>
+	
+	html {
+		font-family: system-ui, sans-serif;
+		background: #13151a;
+		background-size: 224px;
+		color-scheme: dark light;
+		color: antiquewhite;
+	}
+	
+</style>

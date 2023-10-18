@@ -1,0 +1,44 @@
+---
+// ASTRO (por si solo), no tienen idea de como generar estas ID's antes de que existan
+// Por eso motivo, tenemos que llamar nuevamente a la API externa para recuperar las ID's
+import type { GetStaticPaths } from "astro";
+// Esto es una RUTA DINAMICA
+import { getLaunchBy, getLatestLaunches } from '../../services/space'
+
+import Layout  from '../../layouts/Layout.astro'
+
+
+export const prerender = false // Para que sea en el SERVER tiene q ser FALSE
+
+const { id } = Astro.params // Recuperamos la ID en la URL
+console.log(id)
+
+let launch 
+
+// Si existe la ID
+if (id) {
+    // Recuperamos el "launch"
+    launch = await getLaunchBy({ id }) // Se la pasamos a la funcion para el FETCH
+}
+/*
+Solo para STATIC MODE
+export async function  getStaticPaths() {
+
+   // Aca GENERAMOS las ID's para cada URL por medio del FETCH a la API 
+   const launches = await getLatestLaunches()
+
+   return launches.map(launch => ({
+     params: { id: launch.id },
+   })) 
+    
+}*/
+
+console.log(launch)
+---
+<Layout title={`Lanzamiento ${id}`}>
+<article class="flex gap-y-4 flex-col">
+     <img class="w-52 h-auto" src={launch?.links?.patch.small} alt={launch?.name} / >
+    <h2 class="text-4xl text-white font-bold">Launch #{launch?.flight_number}</h2>
+    <p class="text-lg">{launch?.details}</p>
+</article>
+</Layout>
